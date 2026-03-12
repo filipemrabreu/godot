@@ -530,6 +530,14 @@ void TileSetEditor::_move_tile_set_array_element(Object *p_undo_redo, Object *p_
 	} else if (p_array_prefix == "terrain_set_") {
 		if (p_from_index < 0) {
 			undo_redo_man->add_undo_method(ed_tile_set, "remove_terrain_set", p_to_pos < 0 ? ed_tile_set->get_terrain_sets_count() : p_to_pos);
+		} else if (p_to_pos < 0) {
+			// removing terrain set
+			// do nothing
+		} else {
+			// moving terrain sets
+			for (int i = begin; i < end; i++) {
+				undo_redo_man->add_undo_method(ed_tile_set, "clear_terrains", i);
+			}
 		}
 	} else if (components.size() >= 2 && components[0].begins_with("terrain_set_") && components[0].trim_prefix("terrain_set_").is_valid_int() && components[1] == "terrain_") {
 		int terrain_set = components[0].trim_prefix("terrain_set_").to_int();
